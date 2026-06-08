@@ -7,9 +7,9 @@
   --bg-sidebar: #131316;
   --bg-workbench: #18181c;
   --border-color: rgba(255, 255, 255, 0.08);
-  --border-focus: #c5a880; /* Elegant bronze/gold */
-  --accent-gold: #c5a880;
-  --accent-gold-hover: #b3956d;
+  --border-focus: #FF551F; /* Vibrant orange-red (#FF551F) */
+  --accent-gold: #FF551F;
+  --accent-gold-hover: #e64a15;
   --text-primary: #f3f3f5;
   --text-muted: #8d8d99;
   --text-input: #ffffff;
@@ -252,7 +252,7 @@ input[type="number"]:focus,
 textarea:focus,
 select:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 85, 31, 0.15);
 }
 
 textarea {
@@ -345,7 +345,7 @@ textarea {
 
 .btn-primary:hover {
   background-color: var(--accent-gold-hover);
-  box-shadow: 0 4px 15px rgba(197, 168, 128, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 85, 31, 0.3);
 }
 
 .btn-secondary {
@@ -477,13 +477,13 @@ textarea {
 }
 
 .badge {
-  background: rgba(197, 168, 128, 0.1);
+  background: rgba(255, 85, 31, 0.1);
   color: var(--accent-gold);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 12px;
-  border: 1px solid rgba(197, 168, 128, 0.2);
+  border: 1px solid rgba(255, 85, 31, 0.2);
 }
 
 /* Preview Scroll Area */
@@ -734,8 +734,8 @@ textarea {
 
 /* Highlight dynamic data-binding fields visually inside the editor preview */
 .highlight-field {
-  background-color: rgba(197, 168, 128, 0.12);
-  border-bottom: 1px dashed rgba(197, 168, 128, 0.4);
+  background-color: rgba(255, 85, 31, 0.12);
+  border-bottom: 1px dashed rgba(255, 85, 31, 0.4);
   padding: 0 2px;
   border-radius: 2px;
   font-weight: 500;
@@ -743,7 +743,7 @@ textarea {
 }
 
 .highlight-field:hover {
-  background-color: rgba(197, 168, 128, 0.25);
+  background-color: rgba(255, 85, 31, 0.25);
 }
 
 /* ==========================================================================
