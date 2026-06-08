@@ -92,9 +92,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initDynamicLists();
   initAppearanceControls();
   initExportButtons();
+  initMobileNavigation();
   
   // Initial render
   updatePreview();
+  
+  // Adjust initial scale
+  adjustPageScale();
 });
 
 /* ==========================================================================
@@ -436,8 +440,11 @@ function updatePreview() {
   t2Name.innerHTML = d.assinaturas.testemunha2Nome ? `<span class="highlight-field">${d.assinaturas.testemunha2Nome}</span>` : '___________________________';
   t2Cpf.innerHTML = d.assinaturas.testemunha2CPF ? `CPF: <span class="highlight-field">${d.assinaturas.testemunha2CPF}</span>` : 'CPF: _______________________';
   
-  // Perform overflow checks after DOM has updated
-  requestAnimationFrame(checkOverflow);
+  // Perform overflow and scaling checks after DOM has updated
+  requestAnimationFrame(() => {
+    adjustPageScale();
+    checkOverflow();
+  });
 }
 
 /* ==========================================================================
@@ -460,9 +467,12 @@ function checkOverflow() {
   });
 }
 
-// Re-check overflow on browser resize
+// Re-check overflow and page scale on browser resize
 window.addEventListener('resize', () => {
-  requestAnimationFrame(checkOverflow);
+  requestAnimationFrame(() => {
+    adjustPageScale();
+    checkOverflow();
+  });
 });
 
 /* ==========================================================================
@@ -541,4 +551,59 @@ function initExportButtons() {
       updatePreview();
     }
   });
+}
+
+/* ==========================================================================
+   Mobile Responsive Navigation & Scaling
+   ========================================================================== */
+function initMobileNavigation() {
+  const tabs = document.querySelectorAll('.nav-tab');
+  const appContainer = document.querySelector('.app-container');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      
+      const tabTarget = tab.getAttribute('data-tab');
+      if (tabTarget === 'preview') {
+        appContainer.classList.remove('show-edit');
+        appContainer.classList.add('show-preview');
+        // Delay to allow container display flex rendering before measuring size
+        setTimeout(() => {
+          adjustPageScale();
+          checkOverflow();
+        }, 50);
+      } else {
+        appContainer.classList.remove('show-preview');
+        appContainer.classList.add('show-edit');
+      }
+    });
+  });
+}
+
+function adjustPageScale() {
+  const container = document.querySelector('.preview-scroll-container');
+  const wrapper = document.querySelector('.document-pages-wrapper');
+  if (!container || !wrapper) return;
+  
+  const containerWidth = container.offsetWidth - 32; // 16px padding on each side
+  const pageWidth = 794; // 210mm in pixels at 96dpi is ~793.7px
+  
+  // Only scale down if container is narrower than the page
+  if (containerWidth < pageWidth) {
+    const scaleFactor = containerWidth / pageWidth;
+    wrapper.style.transform = `scale(${scaleFactor})`;
+    wrapper.style.transformOrigin = 'top center';
+    
+    // Compensate height collapse in scrolling container
+    const unscaledHeight = wrapper.offsetHeight;
+    const heightDiff = unscaledHeight * (1 - scaleFactor);
+    wrapper.style.marginBottom = `-${heightDiff}px`;
+  } else {
+    wrapper.style.transform = 'none';
+    wrapper.style.marginBottom = '0px';
+  }
 }

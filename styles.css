@@ -747,6 +747,137 @@ textarea {
 }
 
 /* ==========================================================================
+   Mobile Responsive Navigation Tabs Styles
+   ========================================================================== */
+.mobile-nav-tabs {
+  display: none;
+  width: 100%;
+  height: 50px;
+  background-color: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 100;
+}
+
+.nav-tab {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition-speed) var(--ease);
+}
+
+.nav-tab svg {
+  color: var(--text-muted);
+  transition: color var(--transition-speed) var(--ease);
+}
+
+.nav-tab:hover {
+  color: var(--text-primary);
+}
+
+.nav-tab.active {
+  color: var(--accent-gold);
+  border-bottom-color: var(--accent-gold);
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+.nav-tab.active svg {
+  color: var(--accent-gold);
+}
+
+/* ==========================================================================
+   Mobile Layout Adjustments (Max 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .mobile-nav-tabs {
+    display: flex;
+  }
+
+  .app-container {
+    flex-direction: column;
+  }
+
+  /* Default state on mobile is show-edit active */
+  .app-container:not(.show-preview):not(.show-edit) .sidebar {
+    display: flex;
+  }
+  
+  .app-container:not(.show-preview):not(.show-edit) .workbench {
+    display: none;
+  }
+
+  /* Explicit states triggered via JavaScript */
+  .app-container.show-edit .sidebar {
+    display: flex;
+    width: 100% !important;
+    height: calc(100vh - 50px) !important;
+  }
+
+  .app-container.show-edit .workbench {
+    display: none !important;
+  }
+
+  .app-container.show-preview .sidebar {
+    display: none !important;
+  }
+
+  .app-container.show-preview .workbench {
+    display: flex;
+    width: 100% !important;
+    height: calc(100vh - 50px) !important;
+  }
+
+  /* Override sidebar width & headers */
+  .sidebar {
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .sidebar-header {
+    display: none;
+  }
+
+  .sidebar-content {
+    padding: 10px 12px;
+  }
+
+  /* Override workbench header and layout */
+  .workbench {
+    width: 100%;
+  }
+
+  .workbench-header {
+    height: 50px;
+    padding: 0 16px;
+  }
+
+  .document-title-label {
+    font-size: 0.95rem;
+  }
+
+  .toggle-sidebar-btn {
+    display: none !important; /* Hide collapse panel button on mobile */
+  }
+
+  .preview-scroll-container {
+    padding: 15px 8px;
+  }
+
+  .document-pages-wrapper {
+    gap: 20px;
+  }
+}
+
+
+/* ==========================================================================
    Print Style Overrides
    ========================================================================== */
 @media print {
