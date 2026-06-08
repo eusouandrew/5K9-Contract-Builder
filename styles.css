@@ -499,14 +499,10 @@ textarea {
   border: 1px solid rgba(255, 85, 31, 0.2);
 }
 
-/* Scale Container to prevent horizontal scroll overflow */
 .scale-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: block;
   width: 794px;
   height: auto;
-  overflow: visible;
 }
 
 /* Preview Scroll Area */
