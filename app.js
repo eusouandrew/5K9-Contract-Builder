@@ -106,6 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Render history on load
   renderHistoryList();
+  
+  // Lock horizontal scroll on preview container
+  const previewContainer = document.querySelector('.preview-scroll-container');
+  if (previewContainer) {
+    previewContainer.addEventListener('scroll', () => {
+      if (previewContainer.scrollLeft !== 0) {
+        previewContainer.scrollLeft = 0;
+      }
+    });
+  }
 });
 
 /* ==========================================================================

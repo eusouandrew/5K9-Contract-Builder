@@ -508,6 +508,7 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  touch-action: pan-y !important; /* Apenas rolagem vertical no touch, bloqueia arrastar para os lados */
 }
 
 .document-pages-wrapper {
@@ -516,6 +517,7 @@ textarea {
   gap: 40px;
   align-items: center;
   transform-origin: top center;
+  touch-action: pan-y !important; /* Previne que o gesto de rolagem horizontal desalinhe a página */
 }
 
 /* ==========================================================================
