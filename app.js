@@ -106,16 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Render history on load
   renderHistoryList();
-  
-  // Lock horizontal scroll on preview container
-  const previewContainer = document.querySelector('.preview-scroll-container');
-  if (previewContainer) {
-    previewContainer.addEventListener('scroll', () => {
-      if (previewContainer.scrollLeft !== 0) {
-        previewContainer.scrollLeft = 0;
-      }
-    });
-  }
 });
 
 /* ==========================================================================
@@ -637,25 +627,37 @@ function initMobileNavigation() {
 
 function adjustPageScale() {
   const container = document.querySelector('.preview-scroll-container');
-  const wrapper = document.querySelector('.document-pages-wrapper');
-  if (!container || !wrapper) return;
+  const scaleContainer = document.getElementById('scale-container');
+  const wrapper = document.getElementById('print-area');
+  if (!container || !scaleContainer || !wrapper) return;
   
-  const containerWidth = container.offsetWidth - 32; // 16px padding on each side
+  const containerWidth = container.offsetWidth - 32; // 16px padding on mobile
   const pageWidth = 794; // 210mm in pixels at 96dpi is ~793.7px
+  
+  // Reset inline styles first
+  scaleContainer.style.width = 'auto';
+  scaleContainer.style.height = 'auto';
+  wrapper.style.transform = 'none';
+  wrapper.style.transformOrigin = 'top center';
+  wrapper.style.marginBottom = '0px';
+  
+  const unscaledHeight = wrapper.offsetHeight;
   
   // Only scale down if container is narrower than the page
   if (containerWidth < pageWidth) {
     const scaleFactor = containerWidth / pageWidth;
-    wrapper.style.transform = `scale(${scaleFactor})`;
-    wrapper.style.transformOrigin = 'top center';
     
-    // Compensate height collapse in scrolling container
-    const unscaledHeight = wrapper.offsetHeight;
-    const heightDiff = unscaledHeight * (1 - scaleFactor);
-    wrapper.style.marginBottom = `-${heightDiff}px`;
+    // Scale the document pages wrapper from top-left
+    wrapper.style.transform = `scale(${scaleFactor})`;
+    wrapper.style.transformOrigin = 'top left';
+    
+    // Lock the scale-container to the exact scaled dimensions to prevent horizontal layout overflow
+    scaleContainer.style.width = (pageWidth * scaleFactor) + 'px';
+    scaleContainer.style.height = (unscaledHeight * scaleFactor) + 'px';
   } else {
-    wrapper.style.transform = 'none';
-    wrapper.style.marginBottom = '0px';
+    // Desktop: default auto sizing
+    scaleContainer.style.width = '794px';
+    scaleContainer.style.height = 'auto';
   }
 }
 
