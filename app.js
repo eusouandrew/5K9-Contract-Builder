@@ -79,6 +79,9 @@ const defaultContract = {
 // Deep clone the default data to have a working state
 let contractData = JSON.parse(JSON.stringify(defaultContract));
 
+// Initialize export history
+let exportHistory = JSON.parse(localStorage.getItem('5k9_contract_history')) || [];
+
 // Keep track of accordion states
 const accordions = document.querySelectorAll('.accordion');
 
@@ -99,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Adjust initial scale
   adjustPageScale();
+  
+  // Render history on load
+  renderHistoryList();
 });
 
 /* ==========================================================================
@@ -481,6 +487,7 @@ window.addEventListener('resize', () => {
 function initExportButtons() {
   // Native print / PDF save
   document.getElementById('btn-export-native').addEventListener('click', () => {
+    saveToHistory();
     window.print();
   });
   
@@ -524,6 +531,7 @@ function initExportButtons() {
       .from(element)
       .save()
       .then(() => {
+        saveToHistory();
         // Restore highlight styling in editor preview
         highlights.forEach(h => h.style.backgroundColor = '');
         highlights.forEach(h => h.style.borderBottom = '');
@@ -605,5 +613,107 @@ function adjustPageScale() {
   } else {
     wrapper.style.transform = 'none';
     wrapper.style.marginBottom = '0px';
+  }
+}
+
+/* ==========================================================================
+   History Management (CRUD in localStorage)
+   ========================================================================== */
+function saveToHistory() {
+  const clientName = contractData.contratante.name || 'Cliente Sem Nome';
+  const now = new Date();
+  
+  // Format Date (DD/MM/YYYY)
+  const dateStr = now.toLocaleDateString('pt-BR');
+  
+  // Format Time (HH:MM)
+  const timeStr = now.toLocaleTimeString('pt-BR', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+  
+  const entry = {
+    id: Date.now(),
+    clientName: clientName,
+    value: contractData.clausula3.valor || '0,00',
+    date: dateStr,
+    time: timeStr,
+    data: JSON.parse(JSON.stringify(contractData))
+  };
+  
+  exportHistory.unshift(entry);
+  localStorage.setItem('5k9_contract_history', JSON.stringify(exportHistory));
+  renderHistoryList();
+}
+
+function renderHistoryList() {
+  const container = document.getElementById('history-list-container');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  if (exportHistory.length === 0) {
+    container.innerHTML = '<div class="history-empty-text">Nenhum contrato exportado ainda.</div>';
+    return;
+  }
+  
+  exportHistory.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'history-card';
+    
+    card.innerHTML = `
+      <div class="history-card-header">
+        <span class="history-client" title="${item.clientName}">${item.clientName}</span>
+        <span class="history-value">R$ ${item.value}</span>
+      </div>
+      <div class="history-time">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span>${item.date} às ${item.time}</span>
+      </div>
+      <div class="history-card-actions">
+        <button class="history-btn history-btn-load" data-id="${item.id}">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+          Carregar
+        </button>
+        <button class="history-btn history-btn-delete" data-id="${item.id}">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Excluir
+        </button>
+      </div>
+    `;
+    
+    // Bind Action Events
+    card.querySelector('.history-btn-load').addEventListener('click', () => {
+      loadContractFromHistory(item.id);
+    });
+    
+    card.querySelector('.history-btn-delete').addEventListener('click', () => {
+      deleteHistoryItem(item.id);
+    });
+    
+    container.appendChild(card);
+  });
+}
+
+function loadContractFromHistory(id) {
+  const item = exportHistory.find(h => h.id === id);
+  if (!item) return;
+  
+  if (confirm(`Deseja carregar o contrato de "${item.clientName}" exportado em ${item.date} às ${item.time}? Suas edições atuais no painel serão perdidas.`)) {
+    contractData = JSON.parse(JSON.stringify(item.data));
+    initFormValues();
+    window.renderObjetoInputs();
+    updatePreview();
+    
+    // Smooth scroll sidebar to top
+    document.querySelector('.sidebar-content').scrollTop = 0;
+  }
+}
+
+function deleteHistoryItem(id) {
+  if (confirm('Excluir este registro de exportação do histórico?')) {
+    exportHistory = exportHistory.filter(h => h.id !== id);
+    localStorage.setItem('5k9_contract_history', JSON.stringify(exportHistory));
+    renderHistoryList();
   }
 }
