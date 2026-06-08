@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAppearanceControls();
   initExportButtons();
   initMobileNavigation();
+  initAutoGrowTextareas();
   
   // Initial render
   updatePreview();
@@ -221,6 +222,33 @@ function setValueByPath(obj, path, value) {
 }
 
 /* ==========================================================================
+   Auto-Growing Textareas Logic
+   ========================================================================== */
+function adjustTextareaHeight(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+function initAutoGrowTextareas() {
+  const textareas = document.querySelectorAll('textarea');
+  textareas.forEach(textarea => {
+    // Initial size calculation
+    adjustTextareaHeight(textarea);
+    
+    // Auto-grow on typing
+    textarea.addEventListener('input', () => {
+      adjustTextareaHeight(textarea);
+    });
+  });
+}
+
+function updateAllTextareaHeights() {
+  document.querySelectorAll('textarea').forEach(textarea => {
+    adjustTextareaHeight(textarea);
+  });
+}
+
+/* ==========================================================================
    Dynamic Lists Rendering & Events
    ========================================================================== */
 function initDynamicLists() {
@@ -241,6 +269,7 @@ function initDynamicLists() {
       textarea.addEventListener('input', (e) => {
         contractData.clausula1.items[index] = e.target.value;
         updatePreview();
+        adjustTextareaHeight(textarea);
       });
       
       const deleteBtn = document.createElement('button');
@@ -258,6 +287,9 @@ function initDynamicLists() {
       row.appendChild(textarea);
       row.appendChild(deleteBtn);
       container.appendChild(row);
+      
+      // Ajustar altura após anexar ao DOM
+      adjustTextareaHeight(textarea);
     });
   };
   
@@ -557,6 +589,7 @@ function initExportButtons() {
       initFormValues();
       window.renderObjetoInputs();
       updatePreview();
+      updateAllTextareaHeights();
     }
   });
 }
@@ -704,6 +737,7 @@ function loadContractFromHistory(id) {
     initFormValues();
     window.renderObjetoInputs();
     updatePreview();
+    updateAllTextareaHeights();
     
     // Smooth scroll sidebar to top
     document.querySelector('.sidebar-content').scrollTop = 0;

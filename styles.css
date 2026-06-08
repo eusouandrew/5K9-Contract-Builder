@@ -264,7 +264,10 @@ select:focus {
 }
 
 textarea {
-  resize: vertical;
+  padding: 10px 14px 28px 14px; /* Aumento do padding inferior: cria um espaço extra permanente para o texto respirar */
+  resize: none; /* Desabilitar redimensionamento manual, pois será auto-expansível via JS */
+  overflow-y: hidden; /* Ocultar barra de rolagem já que a altura se ajusta */
+  line-height: 1.5;
 }
 
 /* Checkbox group */
@@ -315,21 +318,23 @@ textarea {
 .dynamic-items {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 16px; /* Mais espaço entre os itens para não ficarem espremidos */
+  margin-bottom: 16px;
+  margin-top: 8px;
 }
 
 .dynamic-item-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
 }
 
 .dynamic-item-row textarea {
   flex: 1;
-  min-height: 48px;
-  padding: 8px 12px;
+  min-height: 56px;
+  padding: 10px 12px 28px 12px; /* Mais espaço inferior para o texto respirar */
   font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 /* Buttons */
