@@ -612,11 +612,14 @@ function initMobileNavigation() {
       if (tabTarget === 'preview') {
         appContainer.classList.remove('show-edit');
         appContainer.classList.add('show-preview');
-        // Delay to allow container display flex rendering before measuring size
+        // Wait for the browser to fully render the newly-visible container
+        // before measuring its width for scaling (50ms was too short on some devices)
         setTimeout(() => {
-          adjustPageScale();
-          checkOverflow();
-        }, 50);
+          requestAnimationFrame(() => {
+            adjustPageScale();
+            checkOverflow();
+          });
+        }, 100);
       } else {
         appContainer.classList.remove('show-preview');
         appContainer.classList.add('show-edit');
@@ -627,37 +630,23 @@ function initMobileNavigation() {
 
 function adjustPageScale() {
   const container = document.querySelector('.preview-scroll-container');
-  const scaleContainer = document.getElementById('scale-container');
   const wrapper = document.getElementById('print-area');
-  if (!container || !scaleContainer || !wrapper) return;
-  
-  const containerWidth = container.offsetWidth - 32; // 16px padding on mobile
-  const pageWidth = 794; // 210mm in pixels at 96dpi is ~793.7px
-  
-  // Reset inline styles first
-  scaleContainer.style.width = 'auto';
-  scaleContainer.style.height = 'auto';
-  wrapper.style.transform = 'none';
-  wrapper.style.transformOrigin = 'top center';
-  wrapper.style.marginBottom = '0px';
-  
-  const unscaledHeight = wrapper.offsetHeight;
-  
-  // Only scale down if container is narrower than the page
+  if (!container || !wrapper) return;
+
+  // Must be visible to measure (offsetWidth is 0 when display:none)
+  const containerWidth = container.offsetWidth;
+  if (containerWidth === 0) return;
+
+  const pageWidth = 794; // 210mm at 96 dpi
+
+  // CSS `zoom` shrinks the element AND its layout footprint, so the browser
+  // centers it correctly inside a flex container with no overflow or math tricks.
+  // This is far more reliable than transform:scale on mobile touch surfaces.
   if (containerWidth < pageWidth) {
     const scaleFactor = containerWidth / pageWidth;
-    
-    // Scale the document pages wrapper from top-left
-    wrapper.style.transform = `scale(${scaleFactor})`;
-    wrapper.style.transformOrigin = 'top left';
-    
-    // Lock the scale-container to the exact scaled dimensions to prevent horizontal layout overflow
-    scaleContainer.style.width = (pageWidth * scaleFactor) + 'px';
-    scaleContainer.style.height = (unscaledHeight * scaleFactor) + 'px';
+    wrapper.style.zoom = scaleFactor;
   } else {
-    // Desktop: default auto sizing
-    scaleContainer.style.width = '794px';
-    scaleContainer.style.height = 'auto';
+    wrapper.style.zoom = 1;
   }
 }
 

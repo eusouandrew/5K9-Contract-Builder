@@ -499,22 +499,23 @@ textarea {
   border: 1px solid rgba(255, 85, 31, 0.2);
 }
 
+/* The scale-container is now just a transparent pass-through wrapper.
+   Zoom is applied directly on #print-area via JavaScript. */
 .scale-container {
-  display: block;
-  width: 794px;
-  height: auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Preview Scroll Area */
 .preview-scroll-container {
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden !important;
+  overflow-x: hidden;
   padding: 40px 20px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  touch-action: pan-y !important; /* Apenas rolagem vertical no touch, bloqueia arrastar para os lados */
 }
 
 .document-pages-wrapper {
@@ -522,8 +523,6 @@ textarea {
   flex-direction: column;
   gap: 40px;
   align-items: center;
-  transform-origin: top center;
-  touch-action: pan-y !important; /* Previne que o gesto de rolagem horizontal desalinhe a página */
 }
 
 /* ==========================================================================
@@ -1139,6 +1138,7 @@ textarea {
     gap: 0 !important;
     display: block !important;
     transform: none !important;
+    zoom: 1 !important; /* Reset mobile zoom so printing always uses full A4 size */
   }
 
   /* Standard page layout for direct hard printing */
