@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5K9 Studio | Gerador de Contratos</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <!-- html2pdf.js via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <!-- App Container -->
+  <div class="app-container">
+    
+    <!-- Sidebar / Editor Panel -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-area">
+          <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <div class="logo-text">
+            <span class="logo-title">5K9 STUDIO</span>
+            <span class="logo-subtitle">Contrato Builder</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- Accordion Section 1: Contratada -->
+        <div class="accordion">
+          <button class="accordion-trigger active">
+            <span class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+              Dados da Contratada (Prestadora)
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content open">
+            <div class="form-group">
+              <label for="contratada-name">Razão Social / Nome Completo</label>
+              <input type="text" id="contratada-name" placeholder="Ex: 42755268 JOÃO PAULO OLIVEIRA">
+            </div>
+            <div class="form-group">
+              <label for="contratada-cnpj">CNPJ</label>
+              <input type="text" id="contratada-cnpj" placeholder="Ex: 42.755.268/0001-83">
+            </div>
+            <div class="form-group">
+              <label for="contratada-trade">Nome Fantasia</label>
+              <input type="text" id="contratada-trade" placeholder="Ex: Estúdio Criativo">
+            </div>
+            <div class="form-group">
+              <label for="contratada-address">Endereço Completo</label>
+              <textarea id="contratada-address" rows="2" placeholder="Ex: Rua da Fábrica, 25 - Bangu..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Section 2: Contratante -->
+        <div class="accordion">
+          <button class="accordion-trigger">
+            <span class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              Dados da Contratante (Cliente)
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="contratante-name">Razão Social / Nome</label>
+              <input type="text" id="contratante-name" placeholder="Ex: BGI EMPREENDIMENTOS LTDA">
+            </div>
+            <div class="form-group">
+              <label for="contratante-cnpj">CNPJ</label>
+              <input type="text" id="contratante-cnpj" placeholder="Ex: 58.410.627/0001-09">
+            </div>
+            <div class="form-group">
+              <label for="contratante-address">Endereço Completo</label>
+              <textarea id="contratante-address" rows="2" placeholder="Ex: Estrada Padre Roser 63 - 201..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Section 3: Objeto do Contrato -->
+        <div class="accordion">
+          <button class="accordion-trigger">
+            <span class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+              Cláusula 1ª - Objeto (Serviços)
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="clausula1-intro">Texto de Introdução (1.1)</label>
+              <textarea id="clausula1-intro" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Itens do Escopo de Serviço</label>
+              <div id="objeto-items-container" class="dynamic-items">
+                <!-- Dynamic inputs will be inserted here -->
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-objeto">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Adicionar Item
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Section 4: Valores e Chave PIX -->
+        <div class="accordion">
+          <button class="accordion-trigger">
+            <span class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              Cláusula 3ª - Valores e PIX
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="valor-total">Valor Total (R$)</label>
+                <input type="text" id="valor-total" placeholder="Ex: 1.200,00">
+              </div>
+              <div class="form-group col-6">
+                <label for="pagamento-metodo">Forma de Pagamento</label>
+                <input type="text" id="pagamento-metodo" placeholder="Ex: PIX">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pagamento-condicoes">Condições / Parcelamento</label>
+              <textarea id="pagamento-condicoes" rows="2" placeholder="Ex: sendo realizado 50% no ato da contratação e 50% no final do evento"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="pix-chave">Chave PIX para Depósito</label>
+              <input type="text" id="pix-chave" placeholder="Ex: 5009business@gmail.com">
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Section 5: Foro e Assinaturas -->
+        <div class="accordion">
+          <button class="accordion-trigger">
+            <span class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Foro e Assinatura
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="foro-cidade">Cidade do Foro</label>
+                <input type="text" id="foro-cidade" placeholder="Ex: Barra da Tijuca">
+              </div>
+              <div class="form-group col-6">
+                <label for="foro-estado">Cidade/UF (Estado)</label>
+                <input type="text" id="foro-estado" placeholder="Ex: Rio de Janeiro">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-8">
+                <label for="data-local">Cidade da Assinatura</label>
+                <input type="text" id="data-local" placeholder="Ex: Rio de Janeiro">
+              </div>
+              <div class="form-group col-4">
+                <label for="data-dia">Dia</label>
+                <input type="text" id="data-dia" placeholder="Ex: 08">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-7">
+                <label for="data-mes">Mês (por extenso)</label>
+                <input type="text" id="data-mes" placeholder="Ex: junho">
+              </div>
+              <div class="form-group col-5">
+                <label for="data-ano">Ano</label>
+                <input type="text" id="data-ano" placeholder="Ex: 2026">
+              </div>
+            </div>
+            
+            <div class="divider">Testemunhas (Opcional)</div>
+            <div class="form-group">
+              <label for="testemunha-1-nome">Testemunha 1 - Nome</label>
+              <input type="text" id="testemunha-1-nome" placeholder="Nome da primeira testemunha">
+            </div>
+            <div class="form-group">
+              <label for="testemunha-1-cpf">Testemunha 1 - CPF</label>
+              <input type="text" id="testemunha-1-cpf" placeholder="CPF da primeira testemunha">
+            </div>
+            <div class="form-group">
+              <label for="testemunha-2-nome">Testemunha 2 - Nome</label>
+              <input type="text" id="testemunha-2-nome" placeholder="Nome da segunda testemunha">
+            </div>
+            <div class="form-group">
+              <label for="testemunha-2-cpf">Testemunha 2 - CPF</label>
+              <input type="text" id="testemunha-2-cpf" placeholder="CPF da segunda testemunha">
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Section 6: Aparência -->
+        <div class="accordion">
+          <button class="accordion-trigger">
+            <span class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+              Aparência do Documento
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="font-family">Família da Fonte</label>
+              <select id="font-family">
+                <option value="'Inter', sans-serif">Inter (Moderna)</option>
+                <option value="Arial, sans-serif">Arial / Helvetica (Padrão)</option>
+                <option value="'Courier Prime', monospace">Courier (Máquina de Escrever)</option>
+                <option value="'Playfair Display', serif">Playfair Display (Serifada Elegante)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="font-size">Tamanho da Fonte Base</label>
+              <div class="font-size-control">
+                <input type="range" id="font-size" min="10" max="15" step="0.5" value="11.5">
+                <span id="font-size-val">11.5pt</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="line-height">Espaçamento Entre Linhas</label>
+              <div class="font-size-control">
+                <input type="range" id="line-height" min="1.1" max="1.8" step="0.05" value="1.45">
+                <span id="line-height-val">1.45</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox-group">
+                <input type="checkbox" id="show-overflow-warning" checked>
+                <label for="show-overflow-warning">Exibir aviso de estouro de página</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons in Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button class="btn btn-primary" id="btn-export-native">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Imprimir / Salvar PDF
+        </button>
+        <div class="btn-group">
+          <button class="btn btn-secondary btn-sm" id="btn-export-direct">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Exportação Direta
+          </button>
+          <button class="btn btn-danger btn-sm" id="btn-reset" title="Restaurar dados padrão">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+            Reset
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Preview Area / Workbench -->
+    <main class="workbench">
+      <header class="workbench-header">
+        <div class="header-left">
+          <button class="btn-icon toggle-sidebar-btn" id="toggle-sidebar" title="Recolher painel">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+          </button>
+          <h1 class="document-title-label">Preview do Contrato</h1>
+        </div>
+        <div class="header-right">
+          <div class="badge">Visualização A4 Dinâmica</div>
+        </div>
+      </header>
+
+      <div class="preview-scroll-container">
+        <!-- The Printable Document Container -->
+        <div id="print-area" class="document-pages-wrapper">
+          
+          <!-- PAGE 1 -->
+          <section class="pdf-page" id="page-1">
+            <div class="page-content-wrapper">
+              <header class="doc-header">
+                <h2 class="doc-title" id="preview-title">CONTRATO DE PRESTAÇÃO DE SERVIÇO AUDIOVISUAL</h2>
+              </header>
+
+              <section class="doc-section">
+                <h3 class="section-title">DEFINIÇÃO</h3>
+                <p class="section-text" id="preview-definition"></p>
+              </section>
+
+              <section class="doc-section">
+                <h3 class="section-title">CONTRATADA</h3>
+                <p class="section-text" id="preview-contratada-desc"></p>
+              </section>
+
+              <section class="doc-section">
+                <h3 class="section-title">CONTRATANTE</h3>
+                <p class="section-text" id="preview-contratante-desc"></p>
+              </section>
+
+              <section class="doc-section">
+                <h3 class="section-title">CLÁUSULA PRIMEIRA: DA PRESTAÇÃO DE SERVIÇOS – OBJETO</h3>
+                <p class="section-text" id="preview-clausula1-intro"></p>
+                <ol class="ordered-list list-alpha" id="preview-clausula1-items">
+                  <!-- Rendered dynamically -->
+                </ol>
+              </section>
+            </div>
+            
+            <!-- Overflow indicator line -->
+            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
+            
+            <footer class="page-footer">
+              <div class="footer-border"></div>
+              <div class="footer-meta">
+                <span class="page-number-label">1/4</span>
+              </div>
+            </footer>
+          </section>
+          
+          <!-- PAGE 2 -->
+          <section class="pdf-page" id="page-2">
+            <div class="page-content-wrapper">
+              <section class="doc-section">
+                <h3 class="section-title">CLÁUSULA SEGUNDA: DAS CONDIÇÕES DA PRESTAÇÃO DOS SERVIÇOS</h3>
+                
+                <h4 class="subsection-title">2.1 Obrigações da CONTRATADA</h4>
+                <p class="section-text" id="preview-clausula2-contratada-intro"></p>
+                <ol class="ordered-list list-alpha" id="preview-clausula2-contratada-items">
+                  <!-- Rendered dynamically -->
+                </ol>
+
+                <h4 class="subsection-title">2.2 Obrigações da CONTRATANTE</h4>
+                <ol class="ordered-list list-alpha" id="preview-clausula2-contratante-items">
+                  <!-- Rendered dynamically -->
+                </ol>
+                
+                <p class="section-text text-justify font-bold" id="preview-clausula2-2-1"></p>
+              </section>
+
+              <section class="doc-section">
+                <h3 class="section-title">CLÁUSULA TERCEIRA: VALORES E FORMAS DE PAGAMENTO</h3>
+                <p class="section-text" id="preview-clausula3-1"></p>
+                <p class="section-text" id="preview-clausula3-2"></p>
+              </section>
+            </div>
+            
+            <!-- Overflow indicator line -->
+            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
+
+            <footer class="page-footer">
+              <div class="footer-border"></div>
+              <div class="footer-meta">
+                <span class="page-number-label">2/4</span>
+              </div>
+            </footer>
+          </section>
+
+          <!-- PAGE 3 -->
+          <section class="pdf-page" id="page-3">
+            <div class="page-content-wrapper">
+              <section class="doc-section">
+                <h3 class="section-title">CLÁUSULA QUARTA: DISPOSIÇÕES GERAIS</h3>
+                
+                <div class="clauses-grid-p3" id="preview-clausula4-items-p3">
+                  <!-- Items 4.1 to 4.10 will be dynamically placed here -->
+                </div>
+              </section>
+            </div>
+            
+            <!-- Overflow indicator line -->
+            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
+
+            <footer class="page-footer">
+              <div class="footer-border"></div>
+              <div class="footer-meta">
+                <span class="page-number-label">3/4</span>
+              </div>
+            </footer>
+          </section>
+
+          <!-- PAGE 4 -->
+          <section class="pdf-page" id="page-4">
+            <div class="page-content-wrapper">
+              <section class="doc-section">
+                <!-- Title hidden or small to show continuation -->
+                <div class="clauses-grid-p4" id="preview-clausula4-items-p4">
+                  <!-- Items 4.11 and 4.12 will be dynamically placed here -->
+                </div>
+              </section>
+
+              <section class="doc-section signatures-section">
+                <p class="section-text signature-intro" id="preview-assinatura-intro"></p>
+                
+                <p class="date-line" id="preview-date-line"></p>
+                
+                <div class="signatures-grid">
+                  <div class="signature-block">
+                    <div class="sig-line"></div>
+                    <span class="sig-role">CONTRATADA:</span>
+                    <span class="sig-name" id="preview-sig-contratada-name"></span>
+                  </div>
+                  <div class="signature-block">
+                    <div class="sig-line"></div>
+                    <span class="sig-role">CONTRATANTE:</span>
+                    <span class="sig-name" id="preview-sig-contratante-name"></span>
+                  </div>
+                  <div class="signature-block">
+                    <div class="sig-line"></div>
+                    <span class="sig-role">Testemunha 01:</span>
+                    <span class="sig-name" id="preview-sig-testemunha1-name">___________________________</span>
+                    <span class="sig-cpf" id="preview-sig-testemunha1-cpf">CPF: _______________________</span>
+                  </div>
+                  <div class="signature-block">
+                    <div class="sig-line"></div>
+                    <span class="sig-role">Testemunha 02:</span>
+                    <span class="sig-name" id="preview-sig-testemunha2-name">___________________________</span>
+                    <span class="sig-cpf" id="preview-sig-testemunha2-cpf">CPF: _______________________</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+            
+            <!-- Overflow indicator line -->
+            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
+
+            <footer class="page-footer">
+              <div class="footer-border"></div>
+              <div class="footer-meta">
+                <span class="page-number-label">4/4</span>
+              </div>
+            </footer>
+          </section>
+
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="./app.js"></script>
+</body>
+</html>
