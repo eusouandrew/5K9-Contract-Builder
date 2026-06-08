@@ -206,9 +206,9 @@ button, input, textarea, select {
 }
 
 .accordion-content.open {
-  max-height: 1000px; /* Large enough to fit content */
+  max-height: 3000px; /* Aumentado para suportar caixas auto-expansíveis longas */
   padding: 8px 8px 20px 8px;
-  overflow: visible;
+  overflow: hidden; /* Impede vazamento visual e garante que empurre os blocos abaixo */
 }
 
 /* Form Controls */
