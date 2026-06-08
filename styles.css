@@ -42,6 +42,7 @@ body {
   background-color: var(--bg-app);
   color: var(--text-primary);
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
@@ -64,6 +65,7 @@ button, input, textarea, select {
   display: flex;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   position: relative;
 }
@@ -747,8 +749,26 @@ textarea {
 }
 
 /* ==========================================================================
-   Mobile Responsive Navigation Tabs Styles
+   Mobile Header & Navigation Tabs Styles
    ========================================================================== */
+.mobile-header {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 56px;
+  background-color: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 0;
+  z-index: 101;
+}
+
+.logo-area-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .mobile-nav-tabs {
   display: none;
   width: 100%;
@@ -797,6 +817,10 @@ textarea {
    Mobile Layout Adjustments (Max 768px)
    ========================================================================== */
 @media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+  }
+
   .mobile-nav-tabs {
     display: flex;
   }
@@ -805,42 +829,31 @@ textarea {
     flex-direction: column;
   }
 
+  /* Default and active visibility states */
+  .sidebar,
+  .workbench {
+    width: 100% !important;
+    height: auto !important;
+    flex: 1 !important;
+    box-shadow: none;
+    display: none;
+  }
+
   /* Default state on mobile is show-edit active */
   .app-container:not(.show-preview):not(.show-edit) .sidebar {
     display: flex;
-  }
-  
-  .app-container:not(.show-preview):not(.show-edit) .workbench {
-    display: none;
   }
 
   /* Explicit states triggered via JavaScript */
   .app-container.show-edit .sidebar {
     display: flex;
-    width: 100% !important;
-    height: calc(100vh - 50px) !important;
-  }
-
-  .app-container.show-edit .workbench {
-    display: none !important;
-  }
-
-  .app-container.show-preview .sidebar {
-    display: none !important;
   }
 
   .app-container.show-preview .workbench {
     display: flex;
-    width: 100% !important;
-    height: calc(100vh - 50px) !important;
   }
 
-  /* Override sidebar width & headers */
-  .sidebar {
-    width: 100%;
-    box-shadow: none;
-  }
-
+  /* Hide inner sidebar header since we have the global top header */
   .sidebar-header {
     display: none;
   }
@@ -849,11 +862,29 @@ textarea {
     padding: 10px 12px;
   }
 
-  /* Override workbench header and layout */
-  .workbench {
-    width: 100%;
+  /* Compact Footer for Mobile to prevent clipping */
+  .sidebar-footer {
+    padding: 12px 16px;
+    gap: 8px;
+    background-color: var(--bg-sidebar);
+    border-top: 1px solid var(--border-color);
   }
 
+  .sidebar-footer .btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+
+  .sidebar-footer .btn-group {
+    gap: 8px;
+  }
+
+  .sidebar-footer .btn-group .btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* Override workbench header and layout */
   .workbench-header {
     height: 50px;
     padding: 0 16px;
@@ -880,8 +911,10 @@ textarea {
    SVG Logo & History Panel Styles
    ========================================================================== */
 .logo-svg-brand {
-  height: 26px;
+  height: 36px;
   width: auto;
+  max-width: 100%;
+  object-fit: contain;
   display: block;
 }
 

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "mkdir -p dist && cp index.html styles.css app.js mock-contract.js dist/",
+    "build": "mkdir -p dist && cp index.html styles.css app.js mock-contract.js dist/ && (cp logo.svg dist/ || true) && (cp logo.png dist/ || true)",
     "preview": "vite preview"
   },
   "devDependencies": {
