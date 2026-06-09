@@ -408,44 +408,35 @@ function updatePreview() {
   `;
   document.getElementById('preview-clausula3-2').innerHTML = `<b>3.2</b> ${d.clausula3.text3_2}`;
   
-  // Page 3 - Items 4.1 to 4.10
-  const c4GridP3 = document.getElementById('preview-clausula4-items-p3');
-  c4GridP3.innerHTML = '';
+  // Cláusula Quarta - All Items
+  const c4Container = document.getElementById('preview-clausula4-container');
+  c4Container.innerHTML = '';
   
-  // Render items 4.1 to 4.10 (first 10 items)
+  // Render items 4.1 to 4.10
   for (let i = 0; i < 10; i++) {
     if (d.clausula4.items[i]) {
       const p = document.createElement('p');
-      p.className = 'section-text text-justify';
-      
-      // format inner lines for 4.7 containing a) and b)
-      let content = d.clausula4.items[i];
-      content = content.replace(/\n/g, '<br>');
-      
+      p.className = 'section-text text-justify dynamic-content';
+      let content = d.clausula4.items[i].replace(/\n/g, '<br>');
       p.innerHTML = `<b>4.${i+1}</b> ${content}`;
-      c4GridP3.appendChild(p);
+      c4Container.appendChild(p);
     }
   }
   
-  // Page 4 - Items 4.11, 4.12 & Signatures
-  const c4GridP4 = document.getElementById('preview-clausula4-items-p4');
-  c4GridP4.innerHTML = '';
-  
-  // Render items 4.11 and 4.12
-  // Item 4.11 (eleição do Foro - dynamic text)
+  // Item 4.11 (eleição do Foro)
   const p11 = document.createElement('p');
-  p11.className = 'section-text text-justify';
+  p11.className = 'section-text text-justify dynamic-content';
   const foroCidade = d.clausula4.foroCidade || '[CIDADE DO FORO]';
   const foroEstado = d.clausula4.foroEstado || '[ESTADO DO FORO]';
   p11.innerHTML = `<b>4.11</b> Fica eleito o Foro da <span class="highlight-field">${foroCidade}</span>, na Cidade do <span class="highlight-field">${foroEstado}</span>, para decidir qualquer litígio decorrente do presente instrumento.`;
-  c4GridP4.appendChild(p11);
+  c4Container.appendChild(p11);
   
   // Item 4.12
   if (d.clausula4.items[11]) {
     const p12 = document.createElement('p');
-    p12.className = 'section-text text-justify';
+    p12.className = 'section-text text-justify dynamic-content';
     p12.innerHTML = `<b>4.12</b> ${d.clausula4.items[11]}`;
-    c4GridP4.appendChild(p12);
+    c4Container.appendChild(p12);
   }
   
   // Assinaturas
@@ -480,36 +471,90 @@ function updatePreview() {
   
   // Perform overflow and scaling checks after DOM has updated
   requestAnimationFrame(() => {
+    autoPaginate();
     adjustPageScale();
-    checkOverflow();
   });
 }
 
 /* ==========================================================================
    Page Overflow Detection
    ========================================================================== */
-function checkOverflow() {
-  const showWarning = document.getElementById('show-overflow-warning').checked;
-  const pages = document.querySelectorAll('.pdf-page');
+function autoPaginate() {
+  const printArea = document.getElementById('print-area');
+  const template = document.getElementById('document-template');
   
-  pages.forEach(page => {
-    // Height limit check
-    // If the scrollHeight is larger than clientHeight, it means content has overflowed the A4 page height
-    const isOverflowing = page.scrollHeight > page.clientHeight;
+  if (!printArea || !template) return;
+  
+  // Reset print area (remove all generated pages)
+  printArea.innerHTML = '';
+  
+  // Get all dynamic items from the template
+  // We use .dynamic-content to identify elements that can be moved
+  const allItems = Array.from(template.querySelectorAll('.dynamic-content'));
+  
+  let currentPageNum = 1;
+  let currentPage = createBlankPage(currentPageNum);
+  printArea.appendChild(currentPage);
+  let pageWrapper = currentPage.querySelector('.page-content-wrapper');
+  
+  // Constant for standard A4 Height in pixels (at 96dpi)
+  const A4_HEIGHT_PX = 1122; // 297mm
+  
+  // Iterate through every item and append it
+  for (let i = 0; i < allItems.length; i++) {
+    const item = allItems[i].cloneNode(true);
+    pageWrapper.appendChild(item);
     
-    if (isOverflowing && showWarning) {
-      page.classList.add('overflow');
-    } else {
-      page.classList.remove('overflow');
+    // Check if the page is now overflowing
+    // We compare scrollHeight to the real container height (client height minus padding)
+    // Actually, simply checking if scrollHeight > clientHeight works well because we set fixed height on .pdf-page
+    if (currentPage.scrollHeight > currentPage.clientHeight) {
+      // The item we just added caused an overflow. 
+      // Remove it from current page
+      pageWrapper.removeChild(item);
+      
+      // Create a new page
+      currentPageNum++;
+      currentPage = createBlankPage(currentPageNum);
+      printArea.appendChild(currentPage);
+      pageWrapper = currentPage.querySelector('.page-content-wrapper');
+      
+      // Add the item to the new page
+      pageWrapper.appendChild(item);
     }
+  }
+  
+  // Update all page number labels now that we know the total
+  const allPages = printArea.querySelectorAll('.pdf-page');
+  const totalPages = allPages.length;
+  allPages.forEach((page, index) => {
+    const label = page.querySelector('.page-number-label');
+    if (label) label.textContent = `${index + 1}/${totalPages}`;
   });
+}
+
+function createBlankPage(pageNum) {
+  const section = document.createElement('section');
+  section.className = 'pdf-page';
+  section.id = `page-${pageNum}`;
+  
+  section.innerHTML = `
+    <div class="page-content-wrapper"></div>
+    <footer class="page-footer">
+      <div class="footer-border"></div>
+      <div class="footer-meta">
+        <span class="page-number-label">${pageNum}/?</span>
+      </div>
+    </footer>
+  `;
+  return section;
 }
 
 // Re-check overflow and page scale on browser resize
 window.addEventListener('resize', () => {
   requestAnimationFrame(() => {
+    autoPaginate();
     adjustPageScale();
-    checkOverflow();
   });
 });
 
@@ -616,8 +661,8 @@ function initMobileNavigation() {
         // before measuring its width for scaling (50ms was too short on some devices)
         setTimeout(() => {
           requestAnimationFrame(() => {
+            autoPaginate();
             adjustPageScale();
-            checkOverflow();
           });
         }, 100);
       } else {
