@@ -499,11 +499,14 @@ function autoPaginate() {
   
   if (!printArea || !template) return;
   
+  // Save current zoom and reset to 1 for accurate DOM layout measurements
+  const currentZoom = printArea.style.zoom;
+  printArea.style.zoom = '1';
+  
   // Reset print area (remove all generated pages)
   printArea.innerHTML = '';
   
   // Get all dynamic items from the template
-  // We use .dynamic-content to identify elements that can be moved
   const allItems = Array.from(template.querySelectorAll('.dynamic-content'));
   
   let currentPageNum = 1;
@@ -511,19 +514,19 @@ function autoPaginate() {
   printArea.appendChild(currentPage);
   let pageWrapper = currentPage.querySelector('.page-content-wrapper');
   
-  // Constant for standard A4 Height in pixels (at 96dpi)
-  const A4_HEIGHT_PX = 1122; // 297mm
+  // Define a safety margin to guarantee the text stops well before the footer line.
+  // 30px is approximately 8mm. Added to the footer's existing padding, 
+  // this guarantees a very comfortable, professional gap at the bottom of every page.
+  const SAFETY_MARGIN_PX = 30;
   
   // Iterate through every item and append it
   for (let i = 0; i < allItems.length; i++) {
     const item = allItems[i].cloneNode(true);
     pageWrapper.appendChild(item);
     
-    // Check if the page is now overflowing
-    // We compare scrollHeight to the real container height (client height minus padding)
-    // Actually, simply checking if scrollHeight > clientHeight works well because we set fixed height on .pdf-page
-    if (currentPage.scrollHeight > currentPage.clientHeight) {
-      // The item we just added caused an overflow. 
+    // Check if the page is now overflowing or hitting the safety margin
+    if (currentPage.scrollHeight > (currentPage.clientHeight - SAFETY_MARGIN_PX)) {
+      // The item we just added crossed the boundary. 
       // Remove it from current page
       pageWrapper.removeChild(item);
       
@@ -545,6 +548,9 @@ function autoPaginate() {
     const label = page.querySelector('.page-number-label');
     if (label) label.textContent = `${index + 1}/${totalPages}`;
   });
+  
+  // Restore original zoom state
+  printArea.style.zoom = currentZoom;
 }
 
 function createBlankPage(pageNum) {
