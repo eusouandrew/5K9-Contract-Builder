@@ -570,6 +570,10 @@ textarea {
   height: 100%;
 }
 
+.page-content-wrapper > * {
+  flex-shrink: 0;
+}
+
 /* ==========================================================================
    Overflow Alert Styling
    ========================================================================== */
@@ -1126,7 +1130,9 @@ textarea {
   .sidebar,
   .workbench-header,
   .overflow-indicator,
-  .toggle-sidebar-btn {
+  .toggle-sidebar-btn,
+  .mobile-header,
+  .mobile-nav-tabs {
     display: none !important;
   }
 

@@ -347,6 +347,10 @@ function initAppearanceControls() {
    Preview Rendering Core Logic
    ========================================================================== */
 function updatePreview() {
+  // Clear the print area FIRST, so that getElementById finds the template elements
+  const printArea = document.getElementById('print-area');
+  if (printArea) printArea.innerHTML = '';
+
   const d = contractData;
   
   // Page 1
@@ -369,31 +373,41 @@ function updatePreview() {
   document.getElementById('preview-clausula1-intro').textContent = d.clausula1.intro;
   
   // Render list items for Cláusula 1ª
-  const c1List = document.getElementById('preview-clausula1-items');
-  c1List.innerHTML = '';
-  d.clausula1.items.forEach(item => {
-    const li = document.createElement('li');
-    li.innerHTML = `<span class="highlight-field">${item || '[Especifique o serviço contratado]'}</span>`;
-    c1List.appendChild(li);
+  const c1Container = document.getElementById('preview-clausula1-container');
+  c1Container.innerHTML = '';
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  d.clausula1.items.forEach((item, index) => {
+    const p = document.createElement('p');
+    p.className = 'section-text text-justify dynamic-content';
+    p.style.paddingLeft = '6mm';
+    p.style.marginBottom = '2.5mm';
+    p.innerHTML = `<b>${letters[index]})</b> <span class="highlight-field">${item || '[Especifique o serviço contratado]'}</span>`;
+    c1Container.appendChild(p);
   });
   
   // Page 2
   document.getElementById('preview-clausula2-contratada-intro').textContent = d.clausula2.contratadaIntro;
   
-  const c2ContratadaList = document.getElementById('preview-clausula2-contratada-items');
-  c2ContratadaList.innerHTML = '';
-  d.clausula2.contratadaItems.forEach(item => {
-    const li = document.createElement('li');
-    li.textContent = item;
-    c2ContratadaList.appendChild(li);
+  const c2ContratadaContainer = document.getElementById('preview-clausula2-contratada-container');
+  c2ContratadaContainer.innerHTML = '';
+  d.clausula2.contratadaItems.forEach((item, index) => {
+    const p = document.createElement('p');
+    p.className = 'section-text text-justify dynamic-content';
+    p.style.paddingLeft = '6mm';
+    p.style.marginBottom = '2.5mm';
+    p.innerHTML = `<b>${letters[index]})</b> ${item}`;
+    c2ContratadaContainer.appendChild(p);
   });
   
-  const c2ContratanteList = document.getElementById('preview-clausula2-contratante-items');
-  c2ContratanteList.innerHTML = '';
-  d.clausula2.contratanteItems.forEach(item => {
-    const li = document.createElement('li');
-    li.textContent = item;
-    c2ContratanteList.appendChild(li);
+  const c2ContratanteContainer = document.getElementById('preview-clausula2-contratante-container');
+  c2ContratanteContainer.innerHTML = '';
+  d.clausula2.contratanteItems.forEach((item, index) => {
+    const p = document.createElement('p');
+    p.className = 'section-text text-justify dynamic-content';
+    p.style.paddingLeft = '6mm';
+    p.style.marginBottom = '2.5mm';
+    p.innerHTML = `<b>${letters[index]})</b> ${item}`;
+    c2ContratanteContainer.appendChild(p);
   });
   
   document.getElementById('preview-clausula2-2-1').innerHTML = `<b>2.2.1</b> ${d.clausula2.contratante221}`;

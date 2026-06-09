@@ -312,162 +312,76 @@
         <div class="scale-container" id="scale-container">
           <!-- The Printable Document Container -->
           <div id="print-area" class="document-pages-wrapper">
-          
-          <!-- PAGE 1 -->
-          <section class="pdf-page" id="page-1">
-            <div class="page-content-wrapper">
-              <header class="doc-header">
-                <h2 class="doc-title" id="preview-title">CONTRATO DE PRESTAÇÃO DE SERVIÇO AUDIOVISUAL</h2>
-              </header>
+            <!-- As páginas PDF serão geradas aqui dinamicamente pelo autoPaginate() -->
+          </div>
 
-              <section class="doc-section">
-                <h3 class="section-title">DEFINIÇÃO</h3>
-                <p class="section-text" id="preview-definition"></p>
-              </section>
+          <!-- Template Oculto: Contém todo o conteúdo que será paginado -->
+          <div id="document-template" style="display: none;">
+            <header class="doc-header dynamic-content">
+              <h2 class="doc-title" id="preview-title">CONTRATO DE PRESTAÇÃO DE SERVIÇO AUDIOVISUAL</h2>
+            </header>
 
-              <section class="doc-section">
-                <h3 class="section-title">CONTRATADA</h3>
-                <p class="section-text" id="preview-contratada-desc"></p>
-              </section>
+            <h3 class="section-title dynamic-content">DEFINIÇÃO</h3>
+            <p class="section-text dynamic-content" id="preview-definition"></p>
 
-              <section class="doc-section">
-                <h3 class="section-title">CONTRATANTE</h3>
-                <p class="section-text" id="preview-contratante-desc"></p>
-              </section>
+            <h3 class="section-title dynamic-content">CONTRATADA</h3>
+            <p class="section-text dynamic-content" id="preview-contratada-desc"></p>
 
-              <section class="doc-section">
-                <h3 class="section-title">CLÁUSULA PRIMEIRA: DA PRESTAÇÃO DE SERVIÇOS – OBJETO</h3>
-                <p class="section-text" id="preview-clausula1-intro"></p>
-                <ol class="ordered-list list-alpha" id="preview-clausula1-items">
-                  <!-- Rendered dynamically -->
-                </ol>
-              </section>
+            <h3 class="section-title dynamic-content">CONTRATANTE</h3>
+            <p class="section-text dynamic-content" id="preview-contratante-desc"></p>
+
+            <h3 class="section-title dynamic-content">CLÁUSULA PRIMEIRA: DA PRESTAÇÃO DE SERVIÇOS – OBJETO</h3>
+            <p class="section-text dynamic-content" id="preview-clausula1-intro"></p>
+            <div id="preview-clausula1-container" style="display: contents;"></div>
+
+            <h3 class="section-title dynamic-content">CLÁUSULA SEGUNDA: DAS CONDIÇÕES DA PRESTAÇÃO DOS SERVIÇOS</h3>
+            <h4 class="subsection-title dynamic-content">2.1 Obrigações da CONTRATADA</h4>
+            <p class="section-text dynamic-content" id="preview-clausula2-contratada-intro"></p>
+            <div id="preview-clausula2-contratada-container" style="display: contents;"></div>
+
+            <h4 class="subsection-title dynamic-content">2.2 Obrigações da CONTRATANTE</h4>
+            <div id="preview-clausula2-contratante-container" style="display: contents;"></div>
+            <p class="section-text text-justify font-bold dynamic-content" id="preview-clausula2-2-1"></p>
+
+            <h3 class="section-title dynamic-content">CLÁUSULA TERCEIRA: VALORES E FORMAS DE PAGAMENTO</h3>
+            <p class="section-text dynamic-content" id="preview-clausula3-1"></p>
+            <p class="section-text dynamic-content" id="preview-clausula3-2"></p>
+
+            <h3 class="section-title dynamic-content">CLÁUSULA QUARTA: DISPOSIÇÕES GERAIS</h3>
+            <div id="preview-clausula4-container" style="display: contents;">
+              <!-- Javascript vai inserir os parágrafos <p class="dynamic-content"> aqui. -->
             </div>
-            
-            <!-- Overflow indicator line -->
-            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
-            
-            <footer class="page-footer">
-              <div class="footer-border"></div>
-              <div class="footer-meta">
-                <span class="page-number-label">1/4</span>
-              </div>
-            </footer>
-          </section>
-          
-          <!-- PAGE 2 -->
-          <section class="pdf-page" id="page-2">
-            <div class="page-content-wrapper">
-              <section class="doc-section">
-                <h3 class="section-title">CLÁUSULA SEGUNDA: DAS CONDIÇÕES DA PRESTAÇÃO DOS SERVIÇOS</h3>
-                
-                <h4 class="subsection-title">2.1 Obrigações da CONTRATADA</h4>
-                <p class="section-text" id="preview-clausula2-contratada-intro"></p>
-                <ol class="ordered-list list-alpha" id="preview-clausula2-contratada-items">
-                  <!-- Rendered dynamically -->
-                </ol>
 
-                <h4 class="subsection-title">2.2 Obrigações da CONTRATANTE</h4>
-                <ol class="ordered-list list-alpha" id="preview-clausula2-contratante-items">
-                  <!-- Rendered dynamically -->
-                </ol>
-                
-                <p class="section-text text-justify font-bold" id="preview-clausula2-2-1"></p>
-              </section>
-
-              <section class="doc-section">
-                <h3 class="section-title">CLÁUSULA TERCEIRA: VALORES E FORMAS DE PAGAMENTO</h3>
-                <p class="section-text" id="preview-clausula3-1"></p>
-                <p class="section-text" id="preview-clausula3-2"></p>
-              </section>
-            </div>
-            
-            <!-- Overflow indicator line -->
-            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
-
-            <footer class="page-footer">
-              <div class="footer-border"></div>
-              <div class="footer-meta">
-                <span class="page-number-label">2/4</span>
-              </div>
-            </footer>
-          </section>
-
-          <!-- PAGE 3 -->
-          <section class="pdf-page" id="page-3">
-            <div class="page-content-wrapper">
-              <section class="doc-section">
-                <h3 class="section-title">CLÁUSULA QUARTA: DISPOSIÇÕES GERAIS</h3>
-                
-                <div class="clauses-grid-p3" id="preview-clausula4-items-p3">
-                  <!-- Items 4.1 to 4.10 will be dynamically placed here -->
+            <div class="signatures-section dynamic-content">
+              <p class="section-text signature-intro" id="preview-assinatura-intro"></p>
+              <p class="date-line" id="preview-date-line"></p>
+              
+              <div class="signatures-grid">
+                <div class="signature-block">
+                  <div class="sig-line"></div>
+                  <span class="sig-role">CONTRATADA:</span>
+                  <span class="sig-name" id="preview-sig-contratada-name"></span>
                 </div>
-              </section>
-            </div>
-            
-            <!-- Overflow indicator line -->
-            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
-
-            <footer class="page-footer">
-              <div class="footer-border"></div>
-              <div class="footer-meta">
-                <span class="page-number-label">3/4</span>
-              </div>
-            </footer>
-          </section>
-
-          <!-- PAGE 4 -->
-          <section class="pdf-page" id="page-4">
-            <div class="page-content-wrapper">
-              <section class="doc-section">
-                <!-- Title hidden or small to show continuation -->
-                <div class="clauses-grid-p4" id="preview-clausula4-items-p4">
-                  <!-- Items 4.11 and 4.12 will be dynamically placed here -->
+                <div class="signature-block">
+                  <div class="sig-line"></div>
+                  <span class="sig-role">CONTRATANTE:</span>
+                  <span class="sig-name" id="preview-sig-contratante-name"></span>
                 </div>
-              </section>
-
-              <section class="doc-section signatures-section">
-                <p class="section-text signature-intro" id="preview-assinatura-intro"></p>
-                
-                <p class="date-line" id="preview-date-line"></p>
-                
-                <div class="signatures-grid">
-                  <div class="signature-block">
-                    <div class="sig-line"></div>
-                    <span class="sig-role">CONTRATADA:</span>
-                    <span class="sig-name" id="preview-sig-contratada-name"></span>
-                  </div>
-                  <div class="signature-block">
-                    <div class="sig-line"></div>
-                    <span class="sig-role">CONTRATANTE:</span>
-                    <span class="sig-name" id="preview-sig-contratante-name"></span>
-                  </div>
-                  <div class="signature-block">
-                    <div class="sig-line"></div>
-                    <span class="sig-role">Testemunha 01:</span>
-                    <span class="sig-name" id="preview-sig-testemunha1-name">___________________________</span>
-                    <span class="sig-cpf" id="preview-sig-testemunha1-cpf">CPF: _______________________</span>
-                  </div>
-                  <div class="signature-block">
-                    <div class="sig-line"></div>
-                    <span class="sig-role">Testemunha 02:</span>
-                    <span class="sig-name" id="preview-sig-testemunha2-name">___________________________</span>
-                    <span class="sig-cpf" id="preview-sig-testemunha2-cpf">CPF: _______________________</span>
-                  </div>
+                <div class="signature-block">
+                  <div class="sig-line"></div>
+                  <span class="sig-role">Testemunha 01:</span>
+                  <span class="sig-name" id="preview-sig-testemunha1-name">___________________________</span>
+                  <span class="sig-cpf" id="preview-sig-testemunha1-cpf">CPF: _______________________</span>
                 </div>
-              </section>
-            </div>
-            
-            <!-- Overflow indicator line -->
-            <div class="overflow-indicator"><span>Estouro de Conteúdo - Ajuste o texto ou tamanho da fonte</span></div>
-
-            <footer class="page-footer">
-              <div class="footer-border"></div>
-              <div class="footer-meta">
-                <span class="page-number-label">4/4</span>
+                <div class="signature-block">
+                  <div class="sig-line"></div>
+                  <span class="sig-role">Testemunha 02:</span>
+                  <span class="sig-name" id="preview-sig-testemunha2-name">___________________________</span>
+                  <span class="sig-cpf" id="preview-sig-testemunha2-cpf">CPF: _______________________</span>
+                </div>
               </div>
-            </footer>
-          </section>
+            </div>
+          </div>
 
         </div>
       </div>
