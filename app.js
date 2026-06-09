@@ -524,8 +524,16 @@ function autoPaginate() {
     const item = allItems[i].cloneNode(true);
     pageWrapper.appendChild(item);
     
-    // Check if the page is now overflowing or hitting the safety margin
-    if (currentPage.scrollHeight > (currentPage.clientHeight - SAFETY_MARGIN_PX)) {
+    // Check if the item is getting too close to the footer.
+    // We measure the absolute screen positions using getBoundingClientRect.
+    // Since the page has a fixed height and the footer is absolutely positioned at the bottom,
+    // footerRect.top is a constant fixed line.
+    const itemRect = item.getBoundingClientRect();
+    const footer = currentPage.querySelector('.page-footer');
+    const footerRect = footer.getBoundingClientRect();
+    
+    // If the bottom of our text crosses the top of the footer (minus a 30px safety gap)
+    if (itemRect.bottom > (footerRect.top - SAFETY_MARGIN_PX)) {
       // The item we just added crossed the boundary. 
       // Remove it from current page
       pageWrapper.removeChild(item);
