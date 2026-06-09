@@ -535,12 +535,30 @@ textarea {
   background-color: #ffffff;
   color: #000000;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 25mm 20mm 30mm 20mm; /* standard margins */
+  /* 42mm bottom padding on screen = 30mm real margin + 12mm safety buffer.
+     This ensures content that's close to the edge stays comfortably inside. */
+  padding: 25mm 20mm 42mm 20mm;
   box-sizing: border-box;
-  overflow: hidden; /* Prevent printing overflow markers */
+  /* overflow: visible on screen so overflowed content is visible (not silently clipped).
+     The @print rule below resets this to hidden for actual printing. */
+  overflow: visible;
   display: flex;
   flex-direction: column;
   transition: transform var(--transition-speed) var(--ease);
+}
+
+/* Dashed guide line marking the real 30mm print boundary inside the safety zone.
+   Users can see exactly where the printable area ends. */
+.pdf-page::after {
+  content: '';
+  position: absolute;
+  bottom: 30mm;
+  left: 20mm;
+  right: 20mm;
+  height: 0;
+  border-top: 1px dashed rgba(239, 68, 68, 0.35);
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* Wrapper to hold exact content size for overflow measurement */
@@ -1145,6 +1163,7 @@ textarea {
   .pdf-page {
     width: 210mm !important;
     height: 297mm !important;
+    /* Print uses the real 30mm margin, not the 42mm screen safety buffer */
     padding: 25mm 20mm 30mm 20mm !important;
     margin: 0 !important;
     box-shadow: none !important;
@@ -1156,6 +1175,11 @@ textarea {
     display: flex !important;
     flex-direction: column !important;
     background: #ffffff !important;
+  }
+
+  /* Hide the screen-only guide line when printing */
+  .pdf-page::after {
+    display: none !important;
   }
 
   /* Disable highlight styles when printing */
