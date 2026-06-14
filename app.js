@@ -89,6 +89,7 @@ const accordions = document.querySelectorAll('.accordion');
    UI Event Bindings & Initialization
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
   initAccordions();
   initSidebarToggle();
   initFormValues();
@@ -98,15 +99,40 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNavigation();
   initAutoGrowTextareas();
   
-  // Initial render
+  // Render the initial preview
   updatePreview();
-  
-  // Adjust initial scale
-  adjustPageScale();
-  
-  // Render history on load
   renderHistoryList();
+  
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 });
+
+/* ==========================================================================
+   Theme Logic
+   ========================================================================== */
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (!toggleBtn) return;
+  
+  // Check local storage for theme
+  const savedTheme = localStorage.getItem('5k9_theme');
+  if (savedTheme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+  } else {
+    document.body.removeAttribute('data-theme');
+  }
+  
+  toggleBtn.addEventListener('click', () => {
+    if (document.body.hasAttribute('data-theme')) {
+      document.body.removeAttribute('data-theme');
+      localStorage.setItem('5k9_theme', 'light');
+    } else {
+      document.body.setAttribute('data-theme', 'dark');
+      localStorage.setItem('5k9_theme', 'dark');
+    }
+  });
+}
 
 /* ==========================================================================
    Accordion Logic
@@ -272,25 +298,30 @@ function initDynamicLists() {
         adjustTextareaHeight(textarea);
       });
       
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'btn-icon btn-danger';
-      deleteBtn.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-      `;
-      deleteBtn.title = 'Excluir este item';
-      deleteBtn.addEventListener('click', () => {
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn-icon text-danger';
+      removeBtn.title = 'Remover item';
+      removeBtn.innerHTML = `
+        <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+    `;
+    
+      removeBtn.addEventListener('click', () => {
         contractData.clausula1.items.splice(index, 1);
         renderObjetoInputs();
         updatePreview();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
       });
       
       row.appendChild(textarea);
-      row.appendChild(deleteBtn);
+      row.appendChild(removeBtn);
       container.appendChild(row);
       
       // Ajustar altura após anexar ao DOM
       adjustTextareaHeight(textarea);
     });
+    
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   };
   
   // Handle adding new items
@@ -487,6 +518,7 @@ function updatePreview() {
   requestAnimationFrame(() => {
     autoPaginate();
     adjustPageScale();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   });
 }
 
@@ -768,23 +800,23 @@ function renderHistoryList() {
     const card = document.createElement('div');
     card.className = 'history-card';
     
+    const dateString = `${item.date} às ${item.time}`;
+    
     card.innerHTML = `
-      <div class="history-card-header">
-        <span class="history-client" title="${item.clientName}">${item.clientName}</span>
-        <span class="history-value">R$ ${item.value}</span>
+      <div class="history-item-header">
+        <span class="history-title" title="${item.clientName}">${item.clientName}</span>
+        <span class="history-date">
+          <i data-lucide="clock" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i>
+          ${dateString}
+        </span>
       </div>
-      <div class="history-time">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-        <span>${item.date} às ${item.time}</span>
-      </div>
-      <div class="history-card-actions">
-        <button class="history-btn history-btn-load" data-id="${item.id}">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-          Carregar
+      <div class="history-item-actions">
+        <button class="btn btn-secondary btn-sm history-btn history-btn-load" data-id="${item.id}" title="Restaurar Dados">
+          <i data-lucide="rotate-ccw" style="width: 12px; height: 12px;"></i>
+          Restaurar
         </button>
-        <button class="history-btn history-btn-delete" data-id="${item.id}">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          Excluir
+        <button class="btn btn-danger btn-sm history-btn history-btn-delete" data-id="${item.id}" title="Apagar Histórico">
+          <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
         </button>
       </div>
     `;
